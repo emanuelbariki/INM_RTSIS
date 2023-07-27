@@ -1,18 +1,14 @@
 <?php
 
+use App\Http\Controllers\baseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\equityData\EquityDataController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\liabilities\LiabilitiesDataController;
 use App\Http\Controllers\Others\BankOthersController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\baseController;
 
-
-
-Auth::routes();
+// Auth::routes();
 
 // Route::get('/', [HomeController::class, 'authLogin']);
 
@@ -81,6 +77,5 @@ Route::post('/underwritingAccounts', [AssetsDataController::class, 'underwriting
 Route::post('/digitalCredit', [AssetsDataController::class, 'digitalCredit']);
 Route::post('/microfinanceSegmentLoans', [AssetsDataController::class, 'microfinanceSegmentLoans']);
 Route::post('/premisesFurnitureEquipment', [AssetsDataController::class, 'premisesFurnitureEquipment']);
-
 
 // require __DIR__.'/auth.php';
