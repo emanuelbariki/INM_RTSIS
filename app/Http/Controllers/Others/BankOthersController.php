@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Log;
 
 class BankOthersController extends Controller
 {
-    //
+    protected $url;
+    protected $bic;
+
     public function __construct()
     {
         // $this->url = 'https://196.46.101.104:8245/bot-suptech-others/v1/others/';
@@ -19,7 +21,7 @@ class BankOthersController extends Controller
         $this->bic = '021';
     }
 
-    function accountCategory(Request $request)
+    public function accountCategory(Request $request)
     {
 
         $requestData = $request->all();
@@ -29,7 +31,7 @@ class BankOthersController extends Controller
         foreach ($requestData as $key => $Rdata) {
             if ($key == 'accountCategory') {
                 foreach ($requestData[$key]['oracelData'] as $index => $value) {
-                    Log::info(json_encode($value),JSON_PRETTY_PRINT);
+                    // Log::info(json_encode($value),JSON_PRETTY_PRINT);
                     $value = $base->convertKeysToCamelCase($value);
                     // if ($value['accountType'] > 7) {
                     //     $value['accountType'] = 1;
@@ -37,16 +39,17 @@ class BankOthersController extends Controller
                     $value['sentStatus'] = "no";
                     // unset($value['currency']);
 
-                    $accountCategoryData = new accountCategory($value);
-                    // Log::info("databaseData: ".json_encode($value, JSON_PRETTY_PRINT));
-                    $accountCategoryData->save();
-                    
+                    // $accountCategoryData = new accountCategory($value);
+                    // // Log::info("databaseData: ".json_encode($value, JSON_PRETTY_PRINT));
+                    // $accountCategoryData->save();
+
+                    accountCategory::create($value);
+
                     $datas[] = $value;
                 }
             }
         }
 
-       
         // foreach ($datas as $key => $sdata) {
         //     Log::info(json_encode($sdata,JSON_PRETTY_PRINT));
 
@@ -61,10 +64,11 @@ class BankOthersController extends Controller
 
         $response = null;
         return response($response, 200)
-                  ->header('Content-Type', 'Application/json');
+            ->header('Content-Type', 'Application/json');
     }
 
-    function atmInformation(Request $request){
+    public function atmInformation(Request $request)
+    {
         Log::info("atmInformation");
 
         $requestData = $request->all();
@@ -79,9 +83,9 @@ class BankOthersController extends Controller
                     $value['sentStatus'] = "no";
 
                     $atmInformationData = new atmInformation($value);
-                    Log::info("databaseData: ".json_encode($value, JSON_PRETTY_PRINT));
+                    Log::info("databaseData: " . json_encode($value, JSON_PRETTY_PRINT));
                     $atmInformationData->save();
-                    
+
                     $datas[] = $value;
                 }
             }
@@ -115,15 +119,16 @@ class BankOthersController extends Controller
         //         "atmChannel"=>"1"
         //     ]
         // ];
-        
+
         // $response = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
         // return $response;
         $response = null;
         return response($response, 200)
-                  ->header('Content-Type', 'Application/json');
+            ->header('Content-Type', 'Application/json');
     }
 
-    function atmTransaction(Request $request) {
+    public function atmTransaction(Request $request)
+    {
         Log::info("atmTransaction");
         // $endpoint = $this->url . "atmTransaction";
         // $informationId = baseController::quickRandom(10);
@@ -157,7 +162,8 @@ class BankOthersController extends Controller
 
     }
 
-    function branchInformation(Request $request){
+    public function branchInformation(Request $request)
+    {
         Log::info("branchInformation");
         // $endpoint = "https://suptech-wso2-dev.bot.go.tz:8245/bot-suptech-others/v1/bankOthers/branchInformation";//;$this->url . "branchInformation";
         // $informationId = baseController::quickRandom(10);
@@ -189,7 +195,7 @@ class BankOthersController extends Controller
         //         "branchCategory"=>"1"
         //     ]
         // ];
-        
+
         // $response = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
         // return $response;
 
