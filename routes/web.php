@@ -9,10 +9,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\baseController;
+use App\Http\Controllers\assets\AssetsDataController;
 
 
 
-Auth::routes();
+// Auth::routes();
 
 // Route::get('/', [HomeController::class, 'authLogin']);
 

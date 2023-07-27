@@ -20,8 +20,12 @@ use App\Http\Controllers\Others\BankOthersController;
 |
 */
 Route::any('/accountCategory', [BankOthersController::class, 'accountCategory']);
-Route::any('/', [DashboardController::class, 'testFunction'])->name('testFunctions');
-Route::any('/testFunction', [DashboardController::class, 'testFunction']);
+Route::any('/branchInformation', [BankOthersController::class, 'branchInformation']);
+Route::any('/atmInformation', [BankOthersController::class, 'atmInformation']);
+Route::any('/atmTransaction', [BankOthersController::class, 'atmTransaction']);
+
+// Route::any('/', [DashboardController::class, 'testFunction'])->name('testFunctions');
+// Route::any('/testFunction', [DashboardController::class, 'testFunction']);
 Route::any('/getOracleData', [baseController::class, 'getOracleData']);
 
 
