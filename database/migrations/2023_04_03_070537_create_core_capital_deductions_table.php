@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+
         Schema::create('core_capital_deductions', function (Blueprint $table) {
             $table->id();
             $table->string('reportingDate');

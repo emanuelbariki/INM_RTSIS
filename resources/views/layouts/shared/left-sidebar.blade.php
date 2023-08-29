@@ -1,194 +1,217 @@
-<div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
+<style>
+    .left-side-menu {
+        width: 240px;
+        background: #ffffff;
+        bottom: 0;
+        padding: 20px 0;
+        position: fixed;
+        transition: all 0.1s ease-out;
+        top: 70px;
+        box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
+    }
+</style>
+<!-- ========== Left Sidebar Start ========== -->
+<div class="left-side-menu">
 
-    <div class="sidebar-content">
+    <div class="h-100" data-simplebar>
 
-        <div class="sidebar-section">
-            <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
+        <!-- User box -->
+        <div class="user-box text-center">
+            <img src="{{ asset('assets/images/users/user-1.jpg') }}" alt="user-img" title="Mat Helme"
+                class="rounded-circle avatar-md">
+            <div class="dropdown">
+                <a href="javascript: void(0);" class="text-dark dropdown-toggle h5 mt-2 mb-1 d-block"
+                    data-toggle="dropdown">Geneva Kennedy</a>
+                <div class="dropdown-menu user-pro-dropdown">
 
-                <div>
-                    <button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
-                        <i class="ph-arrows-left-right"></i>
-                    </button>
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <i class="fe-user mr-1"></i>
+                        <span>My Account</span>
+                    </a>
 
-                    <button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
-                        <i class="ph-x"></i>
-                    </button>
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <i class="fe-settings mr-1"></i>
+                        <span>Settings</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <i class="fe-lock mr-1"></i>
+                        <span>Lock Screen</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <i class="fe-log-out mr-1"></i>
+                        <span>Logout</span>
+                    </a>
+
                 </div>
             </div>
+            <p class="text-muted">Admin Head</p>
         </div>
 
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
 
-        <div class="sidebar-section">
-            <ul class="nav nav-sidebar" data-nav-type="accordion">
+            <ul id="side-menu">
 
-                <li class="nav-item-header pt-0">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Main</div>
-                    <i class="ph-dots-three sidebar-resize-show"></i>
+                <li class="menu-title">Navigation</li>
+
+                <li>
+                    <a href="#assetsData" data-toggle="collapse">
+                        <i data-feather="chevrons-right"></i>
+                        <span> Assets Data </span>
+                    </a>
+                    <div class="collapse" id="assetsData">
+                        <ul class="nav-second-level">
+                            <li>
+                                
+
+                                <a href="{{ route('balanceWithOtherBanks') }}">Balance With Other Banks <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('balanceBot') }}">Balance Bot <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('assetOwned') }}">Asset Owned</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('equityInvestment') }}">Equity Investment</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('invDebtSecurities') }}">Inv Debt Securities</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('otherAsset') }}">Other Asset <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('cashInformation') }}">Cash Information</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('interbankLoansReceivable') }}">Interbank Loans Receivable</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('loan') }}">Loan</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('interBranchFloatItem') }}">Inter Branch Float Item</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('overdraft') }}">Overdraft</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('claimTreasury') }}">Claim Treasury</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('institutionPremises') }}">Institution Premises</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('customerLiabilities') }}">Customer Liabilities</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('cheques') }}">Cheques <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('commercialOtherBillsPurchased') }}">Commercial Other Bills
+                                    Purchased</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('underwritingAccounts') }}">Underwriting Accounts</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('digitalCredit') }}">Digital Credit</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('microfinanceSegmentLoans') }}">Microfinance Segment Loans</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('premisesFurnitureEquipment') }}">Premises Furniture Equipment</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null }}">
-                        <i class="ph-house"></i>
-                        <span>Dashboard</span>
+
+                
+
+                <li>
+                    <a href="#BankOthers" data-toggle="collapse">
+                        <i data-feather="chevrons-right"></i>
+                        {{-- <span class="badge badge-success badge-pill float-right">4</span> --}}
+                        <span> Bank Others </span>
+                    </a>
+                    <div class="collapse" id="BankOthers">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('accountCategory') }}">Account Category <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('atmInformation') }}">ATM Information <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('atmTransaction') }}">ATM Transaction <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('branchInformation') }}">Branch Information <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#EquityData" data-toggle="collapse">
+                        <i data-feather="chevrons-right"></i>
+                        {{-- <span class="badge badge-success badge-pill float-right">4</span> --}}
+                        <span> Equity Data </span>
+                    </a>
+                    <div class="collapse" id="EquityData">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('coreCapitalDeductions') }}">Core Capital Deductions <span class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dividendsPayable') }}">Dividends Payable</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('shareCapital') }}">Share Capital </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('otherCapitalAccount') }}">Other Capital Account</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                
+                <li class="menu-title mt-2">Apps</li>
+
+                <li>
+                    <a href="{{ route('second', ['apps', 'calendar']) }}">
+                        <i data-feather="calendar"></i>
+                        <span> Dashboard </span>
                     </a>
                 </li>
 
-                {{--  Layout  --}}
-                <li class="nav-item-header">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">ENDPOINTS</div>
-                    <i class="ph-dots-three sidebar-resize-show"></i>
-                </li>
-
-                <li class="nav-item nav-item-submenu nav-item-expanded nav-item-open">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Equity Data</span>
+                {{-- <li>
+                    <a href="{{ route('second', ['apps', 'chat']) }}">
+                        <i data-feather="message-square"></i>
+                        <span> Chat </span>
                     </a>
+                </li> --}}
 
-                    <ul class="nav-group-sub collapse show">
-                        <li class="nav-item"><a href="#" class="nav-link">Payable</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link active">Capital</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Other capital Account</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Core capital deductions</a></li>
-                    </ul>
-                </li>
+                <li class="menu-title">V 0.0.1</li>
 
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Liabilities Data</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="#" class="nav-link">Digital Savings</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">inter Branch Float Item</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Bankers Cheques</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Transfers Payable</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Accrued Taxes</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Subordinated Debt</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Unearned Income</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Outstanding Acceptances</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Deposit Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Borrowings Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Interbank Loan Payable</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Other</a></li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Assets Data</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="#" class="nav-link">Assets ownned</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Equity Investment </a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Investiment Debt Securities</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Other Asset</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Cash Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Balance Bot</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Balance Other Banks</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Balance MNO </a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Interbank Loans Receivable </a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Loan</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">InterBranch Float Item</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Overdraft</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Claim Treasury</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Institution Premises</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Customer Liabilities</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Cheques</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Commercial Other Bills Purchased</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Underwriting Accounts</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Digital Credit</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Microfinance Segment Loans</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Premises Furniture Equipment</a></li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Off Balance Sheet Data</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="#" class="nav-link">Outstanding Guarantees</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Export Letters Credit</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Outstanding Letters Credit</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Inward Bills</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Outward Bills</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Bought Forward Exchange</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Sold Forward Exchange</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Trust Fiduciary Account</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Safekeeping Heald Item</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Accounts Unsold</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Late Deposit Payments</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Cheque Unsold</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Securities Sold</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Securities Purchased</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Undrawn Balance</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Pre-Operating Expenses</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Currency Swap</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Interest Rate Swap</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Equity Derivatives</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Interest Rate Futures</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Income Statement</a></li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Other Banks Data</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="#" class="nav-link">individual Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Interest Trust Account</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Internet Banking</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Mobile Banking</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Foreignterm Debt</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">ifem Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">ifem Quotes</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">ibcm Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Treasury bond Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Account Category</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Bank Funds Transfer</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">MNO Funds Transfer</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Branch Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Agent Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Agent Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Complaint Fraud Statistics</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">POS Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">POS Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">ATM Information</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">ATM Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Card Transaction</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Remittances</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Written Off loans</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Bank Assurance Data </span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="#" class="nav-link">Insurance Underwritting</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Insurance Claim</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Insurance Commission</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Complaints Fraud Statistics</a></li>
-                    </ul>
-                </li>
             </ul>
+
         </div>
+        <!-- End Sidebar -->
+
+        <div class="clearfix"></div>
 
     </div>
+    <!-- Sidebar -left -->
+
 </div>
+<!-- Left Sidebar End -->

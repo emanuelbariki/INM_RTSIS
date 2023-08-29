@@ -25,7 +25,7 @@ class baseController extends Controller
 
     public function getToken()
     {
-        
+
         $client = new Client();
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded'
@@ -40,8 +40,8 @@ class baseController extends Controller
         $request = new Request('POST', 'https://suptech-wso2-dev.bot.go.tz:8245/token', $headers);
         $res = $client->sendAsync($request, $options)->wait();
         $res = $res->getBody()->getContents();
-        
-        log::info("Token: ".$res);
+
+        log::info("Token: " . $res);
         $token = new Token();
         $token->token = json_decode($res);
         $token->token = $token->token->access_token;
@@ -55,7 +55,15 @@ class baseController extends Controller
     {
 
         try {
-            
+
+            foreach ($data as &$item) {
+                unset($item['id']);
+                unset($item['created_at']);
+                unset($item['updated_at']);
+                unset($item['sentStatus']);
+            }
+
+            // Log::info("URL: " . json_encode($data, JSON_PRETTY_PRINT));
             $base = new baseController();
 
             $currentTime = Carbon::now();
@@ -70,11 +78,11 @@ class baseController extends Controller
                 } else {
                     $token = $token->token;
                 }
-            }else{
+            } else {
                 $token = json_decode($base->getToken());
                 $token = $token->access_token;
             }
-            
+
             Log::info("URL: " . $endpoint);
 
             $cert_store = Storage::disk('public')->get('IMBANKprivate.pfx');
@@ -91,13 +99,13 @@ class baseController extends Controller
                 $json_string = json_encode($content, JSON_PRETTY_PRINT);
 
                 $currentDateTime = Carbon::now();
-                $formattedDateTime = $currentDateTime->format('Y-m-d H:i'); 
+                $formattedDateTime = $currentDateTime->format('Y-m-d H:i');
 
                 $headers = array(
                     'Content-Type:application/json',
                     'Sender: 021',
                     'fspInformationId:' . $informationId,
-                    'Date:'.$formattedDateTime,
+                    'Date:' . $formattedDateTime,
                     'informationId: ' . $informationId,
                     'Authorization: Bearer ' . $token,
                     'Content-Length:' . strlen($json_string),
@@ -121,7 +129,7 @@ class baseController extends Controller
                     if ($resultCurlPost === false || $resultCurlPost == null) {
                         throw new Exception('cURL request failed: ' . curl_error($ch));
                     }
-                    
+
                     // TODO Store Sent Payload
 
                     curl_close($ch);
@@ -209,7 +217,8 @@ class baseController extends Controller
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 
-    public function convertKeysToCamelCase(array $data) {
+    public function convertKeysToCamelCase(array $data)
+    {
 
         $result = [];
         foreach ($data as $key => $value) {
@@ -219,6 +228,11 @@ class baseController extends Controller
         return $result;
     }
 
+    function camelCaseToSnakeCase($input)
+    {
+        $snakeCase = preg_replace('/([a-z0-9])([A-Z])/', '$1_$2', $input);
+        return strtolower($snakeCase);
+    }
 
     public function getOracleData(Request $request)
     {
@@ -312,5 +326,22 @@ class baseController extends Controller
         //     return preg_replace("#\n\n#","\n",preg_replace("#\r\r#","\r",trim(preg_replace("#[^A-Za-z0-9 ,\.'\"\(\)-_\+%!\*\$&=?;:\[\]{}\\/\n\r]#",'',$str))));
         // }
 
+    }
+
+    function removeQuotedIntegers(array $data)
+    {
+        $newData = [];
+
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $newData[$key] = $this->removeQuotedIntegers($value);
+            } elseif (is_numeric($value)) {
+                $newData[$key] = (int)$value;
+            } else {
+                $newData[$key] = $value;
+            }
+        }
+
+        return $newData;
     }
 }

@@ -19,6 +19,10 @@ use App\Http\Controllers\Others\BankOthersController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::any('/balanceOtherBanks', [AssetsDataController::class, 'balanceOtherBanks']);
+
+
 Route::any('/accountCategory', [BankOthersController::class, 'accountCategory']);
 Route::any('/branchInformation', [BankOthersController::class, 'branchInformation']);
 Route::any('/atmInformation', [BankOthersController::class, 'atmInformation']);
