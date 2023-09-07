@@ -8,7 +8,8 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
-// use Illuminate\Http\Request;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,8 @@ use stdClass;
 
 class baseController extends Controller
 {
+    protected $url;
+    protected $bic;
 
     public function __construct()
     {
@@ -46,168 +49,199 @@ class baseController extends Controller
         $token->token = json_decode($res);
         $token->token = $token->token->access_token;
         $token->save();
-
-
         return $res;
+    }
+
+    public function sendDataToEndpoint($model, $endpoint, $reportName)
+    {
+        // $datas = $model::where ('sentStatus', 'no')->get();
+        $datas = $model::where('sentStatus', '!=','yes')
+            ->limit(5)
+            ->get();
+
+
+        $response = [];
+        if (!empty($datas)) {
+            foreach ($datas as $sdata) {
+                $sdataArray = $sdata->toArray();
+
+                if ($model == balanceOtherBanks::class) {
+                    $sdataArray['bankCode'] = $sdataArray['bankName'];
+                    unset($sdataArray['bankName']);
+                }
+
+                if ($model == cheques::class) {
+                    $sdataArray['issuerBanker'] = $sdataArray['issuerBankerCode'];
+                    unset($sdataArray['issuerBankerCode']);
+                }
+
+                $informationId = baseController::quickRandom(10);
+                $data = [$sdataArray];
+
+                $resultCurlPost = baseController::postEndPointResponse($endpoint, $data, $informationId, $reportName);
+                $resultCurlPost = json_decode(json_encode($resultCurlPost), true);
+
+                if (is_array($resultCurlPost)) {
+                    $sentStatus = $resultCurlPost['rtsisInformation']['informationCode'] == '1001' ? 'yes' : 'failed';
+                    $model::where('id', $sdata['id'])->update(['sentStatus' => $sentStatus]);
+                    Log::debug($sentStatus);
+                }
+
+                $response[]['request'] = $data;
+                $response[]['response'] = $resultCurlPost;
+            }
+            return response()->json($response, HttpResponse::HTTP_OK);
+        } else {
+            return response()->json("No Data to Send", HttpResponse::HTTP_OK);
+        }
     }
 
     public static function postEndPointResponse($endpoint, $data, $informationId, $reportName)
     {
-
         try {
+            // Remove unnecessary fields from the data
+            unset($data[0]['id'], $data[0]['created_at'], $data[0]['updated_at'], $data[0]['sentStatus']);
 
-            foreach ($data as &$item) {
-                unset($item['id']);
-                unset($item['created_at']);
-                unset($item['updated_at']);
-                unset($item['sentStatus']);
-            }
-
-            // Log::info("URL: " . json_encode($data, JSON_PRETTY_PRINT));
             $base = new baseController();
 
-            $currentTime = Carbon::now();
+            // Get a valid token using the base controller's method
             $token = Token::latest()->first();
-
-            if ($token != null) {
-                # code...
-                $createdAt = $token->created_at;
-                if ($createdAt->diffInMinutes($currentTime) >= 1) {
-                    $token = json_decode($base->getToken());
-                    $token = $token->access_token;
-                } else {
-                    $token = $token->token;
-                }
-            } else {
-                $token = json_decode($base->getToken());
-                $token = $token->access_token;
-            }
+            $token = $base->getValidToken($token);
 
             Log::info("URL: " . $endpoint);
 
-            $cert_store = Storage::disk('public')->get('IMBANKprivate.pfx');
-            if (openssl_pkcs12_read($cert_store, $cert_info, "passphrase")) {
-                openssl_sign(json_encode($data), $signature, $cert_info['pkey'], "sha256WithRSAEncryption");
+            // Generate the signature
+            $signature = self::generateSignature($data, $reportName);
 
-                //output crypted data base64 encoded
-                $signature = base64_encode($signature);
-                $content = array(
-                    '' . $reportName . '' => $data,
-                    "signature" => $signature
-                );
+            // Create the content payload
+            $content = [
+                $reportName => $data,
+                "signature" => $signature
+            ];
 
-                $json_string = json_encode($content, JSON_PRETTY_PRINT);
+            // Convert the content to JSON string
+            $json_string = json_encode($content, JSON_PRETTY_PRINT);
 
-                $currentDateTime = Carbon::now();
-                $formattedDateTime = $currentDateTime->format('Y-m-d H:i');
+            // Generate headers with required information
+            $headers = self::generateHeaders($informationId, $token, $json_string);
 
-                $headers = array(
-                    'Content-Type:application/json',
-                    'Sender: 021',
-                    'fspInformationId:' . $informationId,
-                    'Date:' . $formattedDateTime,
-                    'informationId: ' . $informationId,
-                    'Authorization: Bearer ' . $token,
-                    'Content-Length:' . strlen($json_string),
-                );
+            Log::info("Data: " . $json_string);
 
-                // Log::info("Headers: " . json_encode($headers, JSON_PRETTY_PRINT));
-                Log::info("Data: " . $json_string);
+            // Perform the POST request using cURL
+            $resultCurlPost = self::performCurlPost($endpoint, $json_string, $headers);
 
-                $ch = curl_init($endpoint);
-                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-                curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
-
-                try {
-                    $resultCurlPost = curl_exec($ch);
-                    if ($resultCurlPost === false || $resultCurlPost == null) {
-                        throw new Exception('cURL request failed: ' . curl_error($ch));
-                    }
-
-                    // TODO Store Sent Payload
-
-                    curl_close($ch);
-
-                    Log::info("###  response from the server ####");
-                    Log::info(json_encode(json_decode($resultCurlPost), JSON_PRETTY_PRINT));
-                    return json_encode(json_decode($resultCurlPost), JSON_PRETTY_PRINT);
-                } catch (Exception $e) {
-                    Log::error('Error during cURL request: ' . $e->getMessage());
-                    curl_close($ch); // Close the cURL handle in case of an error
-                    return 'Error during cURL request: ' . $e->getMessage();
-                }
-            } else {
-                return "OPEN SSL Failed";
-            }
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-                $status = $response->getStatusCode(); // HTTP status code;
-
-                Log::error("Error Code: $status");
-                Log::error("Error Here: " . json_encode($response, JSON_PRETTY_PRINT));
-
-                return (($status == 400)) ? "Remote server is not available" : $response->getReasonPhrase();
-            }
+            return $resultCurlPost;
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return 'Error: ' . $e->getMessage();
         }
     }
 
-    /**
-     * receives the endpoint gets the information
-     *
-     * @param string $endpoint
-     * @return object
-     */
-    public function getEndPointResponse($endpoint, $informationId)
+    public static function generateSignature($data, $reportName)
     {
-        $response = Http::withHeaders([
-            'Sender' => $this->bic,
-            'informationId' => $informationId,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
-        ])->get($this->url . $endpoint);
+        try {
+            // Read the certificate store from the public disk
+            $cert_store = Storage::disk('public')->get('IMBANKprivate.pfx');
 
-        return $response;
+            // Attempt to read the private key from the certificate store using a passphrase
+            if (openssl_pkcs12_read($cert_store, $cert_info, "passphrase")) {
+                // Sign the JSON-encoded data using the private key
+                openssl_sign(json_encode($data), $signature, $cert_info['pkey'], "sha256WithRSAEncryption");
+                return base64_encode($signature);
+            } else {
+                throw new \Exception("OPEN SSL Failed");
+            }
+        } catch (\Exception $e) {
+            // Log and handle any exceptions that occur during signature generation
+            Log::error('Signature Generation Error: ' . $e->getMessage());
+            throw $e; // Re-throw the exception for handling at a higher level
+        }
     }
 
-    public function creatSignature($payload)
+    public static function generateHeaders($informationId, $token, $json_string)
     {
+        try {
+            $currentDateTime = Carbon::now();
+            $formattedDateTime = $currentDateTime->format('Y-m-d H:i');
 
-        // Path to the PFX file
-        $pfxPath = storage_path('app/public/IMBANKprivate.pfx');
-        $pfxPassword = 'pfx_password';
-        $payload = 'This is the payload to be signed';
+            return [
+                'Content-Type: application/json',
+                'Sender: 021',
+                'fspInformationId: ' . $informationId,
+                'Date: ' . $formattedDateTime,
+                'informationId: ' . $informationId,
+                'Authorization: Bearer ' . $token,
+                'Content-Length: ' . strlen($json_string),
+            ];
+        } catch (\Exception $e) {
+            // Log and handle any exceptions that occur during header generation
+            Log::error('Header Generation Error: ' . $e->getMessage());
+            throw $e; // Re-throw the exception for handling at a higher level
+        }
+    }
 
-        // Read the PFX file contents
-        $pfxContents = Storage::disk('public')->get('IMBANKprivate.pfx');
+    public static function performCurlPost($endpoint, $json_string, $headers)
+    {
+        try {
+            // Log::info("Data: " . $json_string);
 
-        // Load the PFX file
-        $privateKey = openssl_pkcs12_read($pfxContents, $certs, $pfxPassword);
+            $ch = curl_init($endpoint);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        // Extract the private key from the PFX file
-        $key = $certs['pkey'];
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
 
-        // Sign the payload
-        $signature = '';
-        openssl_sign($payload, $signature, $key, OPENSSL_ALGO_SHA256);
+            try {
+                $resultCurlPost = curl_exec($ch);
+                if ($resultCurlPost === false || $resultCurlPost == null) {
+                    throw new Exception('cURL request failed: ' . curl_error($ch));
+                }
 
-        // Free the private key resource from memory
-        openssl_free_key($key);
+                curl_close($ch);
 
-        // Base64 encode the signature for transmission or storage
-        $base64Signature = base64_encode($signature);
+                Log::info("###  response from the server ####");
+                Log::info(json_encode(json_decode($resultCurlPost), JSON_PRETTY_PRINT));
+                $resultCurlPost = json_decode($resultCurlPost);
 
-        // Use the $base64Signature as needed
+                return $resultCurlPost;
+            } catch (Exception $e) {
+                Log::error('Error during cURL request: ' . $e->getMessage());
+                curl_close($ch); // Close the cURL handle in case of an error
+                return 'Error during cURL request: ' . $e->getMessage();
+            }
+        } catch (\Exception $e) {
+            // Log and handle any exceptions that occur during cURL request
+            Log::error('cURL Request Error: ' . $e->getMessage());
+            throw $e; // Re-throw the exception for handling at a higher level
+        }
+    }
 
+    public function getValidToken($token)
+    {
+        if ($token != null) {
+            $currentTime = Carbon::now();
+            $createdAt = $token->created_at;
 
-        // Use the $base64Signature as needed
-
+            // Check if the token is still valid (less than 1 minute old)
+            if ($createdAt->diffInMinutes($currentTime) >= 1) {
+                // Get a fresh token if the current token has expired
+                $base = new baseController();
+                $tokenData = json_decode($base->getToken());
+                return $tokenData->access_token;
+            } else {
+                // Return the current token if it's still valid
+                return $token->token;
+            }
+        } else {
+            // Get a new token if no token is available
+            $base = new baseController();
+            $tokenData = json_decode($base->getToken());
+            return $tokenData->access_token;
+        }
     }
 
     public static function quickRandom($length = 16)
@@ -219,12 +253,14 @@ class baseController extends Controller
 
     public function convertKeysToCamelCase(array $data)
     {
-
         $result = [];
+
         foreach ($data as $key => $value) {
+            // Convert snake_case key to camelCase
             $key = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $key))));
             $result[$key] = $value;
         }
+
         return $result;
     }
 
@@ -234,110 +270,19 @@ class baseController extends Controller
         return strtolower($snakeCase);
     }
 
-    public function getOracleData(Request $request)
-    {
-
-        return "Bariki";
-
-        // $currentTime =  mktime(date("H"),   date("i"),   date("s"));
-        // $currentTime = date('H:i:s', $currentTime);
-        // $tomorrow = date("Y-m-d", strtotime('tomorrow'));
-        // $thisyear = date('Y');
-        // define('NOW',$currentTime);
-        // define('TODAY', date('Y-m-d'));
-        // define('TOMORROW', $tomorrow);
-        // define('THISYEAR', $thisyear);
-        // define('CURRENTTIMESTAMP', TODAY." ".NOW);
-
-        // define('ROOTDIR', $_SERVER['DOCUMENT_ROOT']);
-        // define('LOGFILE', ROOTDIR.'/logs/');
-        // // Check if the request method is POST
-        // if ($request) {
-        //     // Get the raw POST data
-        //     // $postData = $request->all();//file_get_contents('php://input');
-        //     $postData = $request->all();
-
-        //     createLog("Recieved Data");
-        //     createLog($postData);
-        //     // Check if data was received
-        //     if (!empty($postData)) {
-        //         // Decode the JSON data into a PHP object
-        //         $jsonData = json_decode($postData);
-
-        //         // Check if JSON decoding was successful
-        //         if ($jsonData !== null) {
-
-        //             $return = getData($jsonData->sql);
-        //             header('Content-Type: application/json');
-        //             echo $return;
-        //             die();
-        //         } else {
-        //             // JSON decoding failed
-        //             http_response_code(400); // Bad Request
-        //             echo "Invalid JSON data";
-        //         }
-        //     } else {
-        //         // No data received
-        //         http_response_code(400); // Bad Request
-        //         echo "No data received";
-        //     }
-        // } else {
-        //     // Invalid request method
-        //     http_response_code(405); // Method Not Allowed
-        //     echo "Invalid request method";
-        // }
-
-
-        // function getData($sql){
-        //     $conn = oci_connect('system', 'manager', '192.168.214.10:1521/IMTZDEV');
-        //     if (!$conn) {
-        //         $e = oci_error();
-        //         trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
-        //     }
-
-        //     $stid = oci_parse($conn, $sql);
-
-        //     oci_execute($stid);
-
-        //     $columnNames = array(); // Array to store column names
-
-        //     // Fetch column names
-        //     for ($i = 1; $i <= oci_num_fields($stid); $i++) {
-        //         $columnNames[] = oci_field_name($stid, $i);
-        //     }
-
-        //     while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
-        //         $data[]= $row;
-        //     }
-        //     //echo "<pre>";
-        //     //print_r($data);
-        //     //echo "</tr>\n";
-        //     return json_encode($data,JSON_PRETTY_PRINT);
-        // }
-
-        // function createLog($logtext){
-        //     $logtext = "[".TODAY."]"." [".NOW."] ".$logtext;
-
-        //     $logtext = $logtext."\n";
-        //     file_put_contents(LOGFILE.superClean(TODAY).".LOG", $logtext, FILE_APPEND | LOCK_EX);
-        //     $logtext = $logtext."\n";
-        // }
-        // function superClean($str) {
-        //     return preg_replace("#\n\n#","\n",preg_replace("#\r\r#","\r",trim(preg_replace("#[^A-Za-z0-9 ,\.'\"\(\)-_\+%!\*\$&=?;:\[\]{}\\/\n\r]#",'',$str))));
-        // }
-
-    }
-
-    function removeQuotedIntegers(array $data)
+    public function removeQuotedIntegers(array $data)
     {
         $newData = [];
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
+                // Recurse into sub-arrays
                 $newData[$key] = $this->removeQuotedIntegers($value);
             } elseif (is_numeric($value)) {
+                // Convert quoted numeric strings to integers
                 $newData[$key] = (int)$value;
             } else {
+                // Keep non-numeric values unchanged
                 $newData[$key] = $value;
             }
         }

@@ -71,21 +71,11 @@ class LiabilitiesDataController extends Controller
 
     public function digitalSaving(Request $request)
     {
-        $datas = digitalSaving::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "digitalSaving";
-            $reportName = 'digitalSaving';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "digitalSaving";
+        $reportName = 'digitalSaving';
+        return $base->sendDataToEndpoint(digitalSaving::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function getDigitalSaving(Request $request)
@@ -95,23 +85,13 @@ class LiabilitiesDataController extends Controller
     }
 
 
-    public function interBranchFloatItem(Request $request)
+    public function LiabilitiesiInterBranchFloatItem(Request $request)
     {
-        $datas = interBranchFloatItem::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "interBranchFloatItem";
-            $reportName = 'interBranchFloatItem';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "interBranchFloatItem";
+        $reportName = 'interBranchFloatItem';
+        return $base->sendDataToEndpoint(interBranchFloatItem::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function getInterBranchFloatItem(Request $request)
@@ -122,21 +102,11 @@ class LiabilitiesDataController extends Controller
 
     public function bankersCheques(Request $request)
     {
-        $datas = bankersCheques::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "bankersCheques";
-            $reportName = 'bankersCheques';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "bankersCheques";
+        $reportName = 'bankersCheques';
+        return $base->sendDataToEndpoint(bankersCheques::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function getBankersCheques(Request $request)
@@ -147,21 +117,11 @@ class LiabilitiesDataController extends Controller
 
     public function transfersPayable(Request $request)
     {
-        $datas = transfersPayable::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "transfersPayable";
-            $reportName = 'transfersPayable';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "transfersPayable";
+        $reportName = 'transfersPayable';
+        return $base->sendDataToEndpoint(transfersPayable::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function getTransfersPayable(Request $request)

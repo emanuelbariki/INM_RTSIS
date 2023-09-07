@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\coreCapitalDeductions;
 use App\Models\dividendsPayable;
+use App\Models\shareCapital;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,158 +25,54 @@ class EquityDataController extends Controller
     }
 
     public function dividendsPayable(Request $request)
-    {
-        Log::info("dividendsPayable");
-        $datas = dividendsPayable::where('sentStatus', 'no')->get();
-        $response = null;
-        Log::info(json_encode($datas,JSON_PRETTY_PRINT));
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "dividendsPayable";
-            $reportName = 'dividendsPayableData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info($sdata);
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+    {   
+        
+        $base = new baseController;
+        $endpoint = $this->url . "dividendsPayable";
+        $reportName = 'dividendsPayableData';
+        return $base->sendDataToEndpoint(dividendsPayable::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
 
     }
 
     public function getDividendsPayable(Request $request)
-    {
-        $datas = ShareCapital::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "ShareCapital";
-            $reportName = 'ShareCapitalData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+    {   
+        
+        $base = new baseController;
+        $endpoint = $this->url . "ShareCapital";
+        $reportName = 'ShareCapitalData';
+        return $base->sendDataToEndpoint(ShareCapital::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function shareCapital(Request $request)
-    {
-        $datas = ShareCapital::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "ShareCapital";
-            $reportName = 'ShareCapitalData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+    {   
+    
+        $base = new baseController;
+        $endpoint = $this->url . "ShareCapital";
+        $reportName = 'ShareCapitalData';
+        return $base->sendDataToEndpoint(shareCapital::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
-    }
-
-    public function getShareCapital(Request $request)
-    {
-        $datas = ShareCapital::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "ShareCapital";
-            $reportName = 'ShareCapitalData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function otherCapitalAccount(Request $request)
     {
-        $datas = otherCapitalAccount::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "otherCapitalAccount";
-            $reportName = 'otherCapitalAccountData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        
+        $base = new baseController;
+        $endpoint = $this->url . "otherCapitalAccount";
+        $reportName = 'otherCapitalAccountData';
+        return $base->sendDataToEndpoint(otherCapitalAccount::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
-    }
-
-    public function getOtherCapitalAccount(Request $request)
-    {
-        $datas = otherCapitalAccount::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "otherCapitalAccount";
-            $reportName = 'otherCapitalAccountData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
     public function coreCapitalDeductions(Request $request)
     {
-        $datas = coreCapitalDeductions::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "coreCapitalDeductions";
-            $reportName = 'coreCapitalDeductionsData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "coreCapitalDeductions";
+        $reportName = 'coreCapitalDeductionsData';
+        return $base->sendDataToEndpoint(coreCapitalDeductions::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
-    public function getCoreCapitalDeductions(Request $request)
-    {
-        $datas = coreCapitalDeductions::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "coreCapitalDeductions";
-            $reportName = 'coreCapitalDeductionsData';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
-    }
 }

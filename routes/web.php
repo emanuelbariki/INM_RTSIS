@@ -27,60 +27,56 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('index'
 Route::middleware(['auth'])->group(function () {
 
     Route::group(['prefix' => 'send-data'], function () {
-        
+
         // AssetsData
-        Route::any('/balanceWithOtherBanks', [AssetsDataController::class, 'balanceOtherBanks']);
-        Route::any('/balanceBot', [AssetsDataController::class, 'balanceBot']);
+        Route::any('/balanceWithOtherBanks', [AssetsDataController::class, 'balanceOtherBanks'])->name('send-balanceOtherBanks');
+        Route::any('/balanceBot', [AssetsDataController::class, 'balanceBot'])->name('send-balanceBot');
+        Route::any('/assetOwned', [AssetsDataController::class, 'assetOwned'])->name('send-assetOwned');
+        Route::any('/equityInvestment', [AssetsDataController::class, 'equityInvestment'])->name('send-equityInvestment');
+        Route::any('/invDebtSecurities ', [AssetsDataController::class, 'invDebtSecurities '])->name('send-invDebtSecurities');
+        Route::any('/otherAsset', [AssetsDataController::class, 'otherAsset'])->name('send-otherAsset');
+        Route::any('/cheques', [AssetsDataController::class, 'cheques'])->name('send-cheques');
+        Route::any('/cashInformation', [AssetsDataController::class, 'cashInformation'])->name('send-cashInformation');
+        Route::any('/interbankLoansReceivable', [AssetsDataController::class, 'interbankLoansReceivable'])->name('send-interbankLoansReceivable');
+        Route::any('/loan', [AssetsDataController::class, 'loan'])->name('send-loan');
+        Route::any('/interBranchFloatItem', [AssetsDataController::class, 'interBranchFloatItem'])->name('send-interBranchFloatItem');
+        Route::any('/overdraft', [AssetsDataController::class, 'overdraft'])->name('send-overdraft');
+        Route::any('/claimTreasury', [AssetsDataController::class, 'claimTreasury'])->name('send-claimTreasury');
+        Route::any('/institutionPremises', [AssetsDataController::class, 'institutionPremises'])->name('send-institutionPremises');
+        Route::any('/customerLiabilities', [AssetsDataController::class, 'customerLiabilities'])->name('send-customerLiabilities');
+        Route::any('/commercialOtherBillsPurchased', [AssetsDataController::class, 'commercialOtherBillsPurchased'])->name('send-commercialOtherBillsPurchased');
+        Route::any('/underwritingAccounts', [AssetsDataController::class, 'underwritingAccounts'])->name('send-underwritingAccounts');
+        Route::any('/digitalCredit', [AssetsDataController::class, 'digitalCredit'])->name('send-digitalCredit');
+        Route::any('/microfinanceSegmentLoans', [AssetsDataController::class, 'microfinanceSegmentLoans'])->name('send-microfinanceSegmentLoans');
+        Route::any('/premisesFurnitureEquipment', [AssetsDataController::class, 'premisesFurnitureEquipment'])->name('send-premisesFurnitureEquipment');
 
-        Route::any('/assetOwned', [AssetsDataController::class, 'assetOwned']);
-        Route::any('/equityInvestment', [AssetsDataController::class, 'equityInvestment']);
-        Route::any('/invDebtSecurities ', [AssetsDataController::class, 'invDebtSecurities ']);
-        Route::any('/otherAsset', [AssetsDataController::class, 'otherAsset']);
-        Route::any('/cheques', [AssetsDataController::class, 'cheques']);
-        Route::any('/cashInformation', [AssetsDataController::class, 'cashInformation']);
-        Route::any('/interbankLoansReceivable', [AssetsDataController::class, 'interbankLoansReceivable']);
-        Route::any('/loan', [AssetsDataController::class, 'loan']);
-        Route::any('/interBranchFloatItem', [AssetsDataController::class, 'interBranchFloatItem']);
-        Route::any('/overdraft', [AssetsDataController::class, 'overdraft']);
-        Route::any('/claimTreasury', [AssetsDataController::class, 'claimTreasury']);
-        Route::any('/institutionPremises', [AssetsDataController::class, 'institutionPremises']);
-        Route::any('/customerLiabilities', [AssetsDataController::class, 'customerLiabilities']);
-        Route::any('/commercialOtherBillsPurchased', [AssetsDataController::class, 'commercialOtherBillsPurchased']);
-        Route::any('/underwritingAccounts', [AssetsDataController::class, 'underwritingAccounts']);
-        Route::any('/digitalCredit', [AssetsDataController::class, 'digitalCredit']);
-        Route::any('/microfinanceSegmentLoans', [AssetsDataController::class, 'microfinanceSegmentLoans']);
-        Route::any('/premisesFurnitureEquipment', [AssetsDataController::class, 'premisesFurnitureEquipment']);
 
-        
         //BankOthers
-        Route::any('/accountCategory', [BankOthersController::class, 'accountCategory']);
-        Route::any('/atmInformation', [BankOthersController::class, 'atmInformation']);
-        Route::any('/atmTransaction', [BankOthersController::class, 'atmTransaction']);
-        Route::any('/branchInformation', [BankOthersController::class, 'branchInformation']);
+        Route::any('/accountCategory', [BankOthersController::class, 'accountCategory'])->name('send-accountCategory');
+        Route::any('/atmInformation', [BankOthersController::class, 'atmInformation'])->name('send-atmInformation');
+        Route::any('/atmTransaction', [BankOthersController::class, 'atmTransaction'])->name('send-atmTransaction');
+        Route::any('/branchInformation', [BankOthersController::class, 'branchInformation'])->name('send-branchInformation');
 
         // Equity data
-        Route::any('/coreCapitalDeductions', [EquityDataController::class, 'coreCapitalDeductions']);
-        Route::any('/dividendsPayable', [EquityDataController::class, 'dividendsPayable']);
-        Route::any('/shareCapital', [EquityDataController::class, 'shareCapital']);
-        Route::any('/otherCapitalAccount', [EquityDataController::class, 'otherCapitalAccount']);
+        Route::any('/coreCapitalDeductions', [EquityDataController::class, 'coreCapitalDeductions'])->name('send-coreCapitalDeductions');
+        Route::any('/dividendsPayable', [EquityDataController::class, 'dividendsPayable'])->name('send-dividendsPayable');
+        Route::any('/shareCapital', [EquityDataController::class, 'shareCapital'])->name('send-shareCapital');
+        Route::any('/otherCapitalAccount', [EquityDataController::class, 'otherCapitalAccount'])->name('send-otherCapitalAccount');
         // Route::any('/coreCapitalDeductions', [EquityDataController::class, 'coreCapitalDeductions']);
 
         // liabilities data
-        Route::post('/digitalSaving', [LiabilitiesDataController::class, 'digitalSaving']);
-        Route::post('/interBranchFloatItem', [LiabilitiesDataController::class, 'interBranchFloatItem']);
-        Route::post('/bankersCheques', [LiabilitiesDataController::class, 'bankersCheques']);
-        Route::post('/transfersPayable', [LiabilitiesDataController::class, 'transfersPayable']);
-        Route::post('/accruedTaxes', [LiabilitiesDataController::class, 'accruedTaxes']);
-        Route::post('/subordinatedDebt', [LiabilitiesDataController::class, 'subordinatedDebt']);
-        Route::post('/unearnedIncome', [LiabilitiesDataController::class, 'unearnedIncome']);
-        Route::post('/outstandingAcceptances', [LiabilitiesDataController::class, 'outstandingAcceptances']);
-        Route::post('/depositInformation', [LiabilitiesDataController::class, 'depositInformation']);
-        Route::post('/borrowingsInformation', [LiabilitiesDataController::class, 'borrowingsInformation']);
-        Route::post('/interbankLoanPayable', [LiabilitiesDataController::class, 'interbankLoanPayable']);
-        Route::post('/otherLiabilities', [LiabilitiesDataController::class, 'otherLiabilities']);
-
-
-
+        Route::post('/digitalSaving', [LiabilitiesDataController::class, 'digitalSaving'])->name('send-digitalSaving');
+        Route::post('/interBranchFloatItem', [LiabilitiesDataController::class, 'LiabilitiesiInterBranchFloatItem'])->name('send-LiabilitiesiInterBranchFloatItem');
+        Route::post('/bankersCheques', [LiabilitiesDataController::class, 'bankersCheques'])->name('send-bankersCheques');
+        Route::post('/transfersPayable', [LiabilitiesDataController::class, 'transfersPayable'])->name('send-transfersPayable');
+        Route::post('/accruedTaxes', [LiabilitiesDataController::class, 'accruedTaxes'])->name('send-accruedTaxes');
+        Route::post('/subordinatedDebt', [LiabilitiesDataController::class, 'subordinatedDebt'])->name('send-subordinatedDebt');
+        Route::post('/unearnedIncome', [LiabilitiesDataController::class, 'unearnedIncome'])->name('send-unearnedIncome');
+        Route::post('/outstandingAcceptances', [LiabilitiesDataController::class, 'outstandingAcceptances'])->name('send-outstandingAcceptances');
+        Route::post('/depositInformation', [LiabilitiesDataController::class, 'depositInformation'])->name('send-depositInformation');
+        Route::post('/borrowingsInformation', [LiabilitiesDataController::class, 'borrowingsInformation'])->name('send-borrowingsInformation');
+        Route::post('/interbankLoanPayable', [LiabilitiesDataController::class, 'interbankLoanPayable'])->name('send-interbankLoanPayable');
+        Route::post('/otherLiabilities', [LiabilitiesDataController::class, 'otherLiabilities'])->name('send-otherLiabilities');
     });
 
     Route::group(['prefix' => 'dashboard'], function () {
@@ -121,6 +117,22 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dividendsPayable', [viewEquityDataController::class, 'dividendsPayable'])->name('dividendsPayable');
             Route::get('/shareCapital', [viewEquityDataController::class, 'shareCapital'])->name('shareCapital');
             Route::get('/otherCapitalAccount', [viewEquityDataController::class, 'otherCapitalAccount'])->name('otherCapitalAccount');
+        });
+
+        Route::group(['prefix' => 'Liabilities'], function () {
+            // liabilities data
+            Route::get('/digitalSaving', [LiabilitiesDataController::class, 'digitalSaving'])->name('digitalSaving');
+            Route::get('/interBranchFloatItem', [LiabilitiesDataController::class, 'LiabilitiesiInterBranchFloatItem'])->name('LiabilitiesiInterBranchFloatItem');
+            Route::get('/bankersCheques', [LiabilitiesDataController::class, 'bankersCheques'])->name('bankersCheques');
+            Route::get('/transfersPayable', [LiabilitiesDataController::class, 'transfersPayable'])->name('transfersPayable');
+            Route::get('/accruedTaxes', [LiabilitiesDataController::class, 'accruedTaxes'])->name('accruedTaxes');
+            Route::get('/subordinatedDebt', [LiabilitiesDataController::class, 'subordinatedDebt'])->name('subordinatedDebt');
+            Route::get('/unearnedIncome', [LiabilitiesDataController::class, 'unearnedIncome'])->name('unearnedIncome');
+            Route::get('/outstandingAcceptances', [LiabilitiesDataController::class, 'outstandingAcceptances'])->name('outstandingAcceptances');
+            Route::get('/depositInformation', [LiabilitiesDataController::class, 'depositInformation'])->name('depositInformation');
+            Route::get('/borrowingsInformation', [LiabilitiesDataController::class, 'borrowingsInformation'])->name('borrowingsInformation');
+            Route::get('/interbankLoanPayable', [LiabilitiesDataController::class, 'interbankLoanPayable'])->name('interbankLoanPayable');
+            Route::get('/otherLiabilities', [LiabilitiesDataController::class, 'otherLiabilities'])->name('otherLiabilities');
         });
     });
 

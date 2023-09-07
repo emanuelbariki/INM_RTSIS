@@ -68,73 +68,60 @@
                     <div class="collapse" id="assetsData">
                         <ul class="nav-second-level">
                             <li>
-                                
-
-                                <a href="{{ route('balanceWithOtherBanks') }}">Balance With Other Banks <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('balanceWithOtherBanks') }}">Balance With Other Banks <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('balanceBot') }}">Balance Bot <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('balanceBot') }}">Balance Bot <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('assetOwned') }}">Asset Owned</a>
+                                <a href="{{ route('equityInvestment') }}">Equity Investment <span
+                                        class="badge text-white bg-warning float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('equityInvestment') }}">Equity Investment</a>
+                                <a href="{{ route('invDebtSecurities') }}">Inv Debt Securities <span
+                                        class="badge text-white bg-danger float-end">No</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('invDebtSecurities') }}">Inv Debt Securities</a>
+                                <a href="{{ route('otherAsset') }}">Other Asset <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('otherAsset') }}">Other Asset <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('cashInformation') }}">Cash Information <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('cashInformation') }}">Cash Information</a>
+                                <a href="{{ route('interbankLoansReceivable') }}">Interbank Loans Receivable <span
+                                        class="badge text-white bg-danger float-end">No</a>
                             </li>
                             <li>
-                                <a href="{{ route('interbankLoansReceivable') }}">Interbank Loans Receivable</a>
+                                <a href="{{ route('loan') }}">Loan <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('loan') }}">Loan</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('interBranchFloatItem') }}">Inter Branch Float Item</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('overdraft') }}">Overdraft</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('claimTreasury') }}">Claim Treasury</a>
+                                <a href="{{ route('overdraft') }}">Overdraft <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
                                 <a href="{{ route('institutionPremises') }}">Institution Premises</a>
                             </li>
                             <li>
-                                <a href="{{ route('customerLiabilities') }}">Customer Liabilities</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('cheques') }}">Cheques <span class="badge text-white bg-success float-end">Done</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ route('commercialOtherBillsPurchased') }}">Commercial Other Bills
-                                    Purchased</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('underwritingAccounts') }}">Underwriting Accounts</a>
+                                <a href="{{ route('cheques') }}">Cheques <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
                                 <a href="{{ route('digitalCredit') }}">Digital Credit</a>
                             </li>
                             <li>
-                                <a href="{{ route('microfinanceSegmentLoans') }}">Microfinance Segment Loans</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('premisesFurnitureEquipment') }}">Premises Furniture Equipment</a>
+                                <a href="{{ route('premisesFurnitureEquipment') }}">Premises Furniture Equipment <span
+                                        class="badge text-white bg-warning float-end">Done</span></a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
-                
+
 
                 <li>
                     <a href="#BankOthers" data-toggle="collapse">
@@ -145,16 +132,23 @@
                     <div class="collapse" id="BankOthers">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{ route('accountCategory') }}">Account Category <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('accountCategory') }}">Account Category <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('atmInformation') }}">ATM Information <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('atmInformation') }}">ATM Information <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('atmTransaction') }}">ATM Transaction <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('atmTransaction') }}">ATM Transaction <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('branchInformation') }}">Branch Information <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('branchInformation') }}">Branch Information <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('branchInformation') }}">Transfer Funds Banks </a>
                             </li>
                         </ul>
                     </div>
@@ -169,22 +163,58 @@
                     <div class="collapse" id="EquityData">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{ route('coreCapitalDeductions') }}">Core Capital Deductions <span class="badge text-white bg-success float-end">Done</span></a>
+                                <a href="{{ route('coreCapitalDeductions') }}">Core Capital Deductions <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('dividendsPayable') }}">Dividends Payable</a>
+                                <a href="{{ route('dividendsPayable') }}">Dividends Payable <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
                             <li>
-                                <a href="{{ route('shareCapital') }}">Share Capital </a>
+                                <a href="{{ route('shareCapital') }}">Share Capital <span
+                                        class="badge text-white bg-success float-end">Done</span></a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('otherCapitalAccount') }}">Other Capital Account</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
 
-                
+                <li>
+                    <a href="#EquityData" data-toggle="collapse">
+                        <i data-feather="chevrons-right"></i>
+                        {{-- <span class="badge badge-success badge-pill float-right">4</span> --}}
+                        <span> Liabilities Data </span>
+                    </a>
+                    <div class="collapse" id="EquityData">
+                        <ul class="nav-second-level">
+                            @foreach ([
+                                        'digitalSaving' => 'Digital Saving',
+                                        'LiabilitiesiInterBranchFloatItem' => 'Inter Branch Float Item',
+                                        'bankersCheques' => 'Bankers Cheques',
+                                        'transfersPayable' => 'Transfers Payable',
+                                        'accruedTaxes' => 'Accrued Taxes',
+                                        'subordinatedDebt' => 'Subordinated Debt',
+                                        'unearnedIncome' => 'Unearned Income',
+                                        'outstandingAcceptances' => 'Outstanding Acceptances',
+                                        'depositInformation' => 'Deposit Information',
+                                        'borrowingsInformation' => 'Borrowings Information',
+                                        'interbankLoanPayable' => 'Interbank Loan Payable',
+                                        'otherLiabilities' => 'Other Liabilities',
+                                    ] as $routeName => $routeLabel)
+                                <li>
+                                    <a href="{{ route($routeName) }}">{{ $routeLabel }}
+                                        <span class="badge text-white bg-success float-end">Done</span>
+                                    </a>
+                                </li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+                </li>
+
+
                 <li class="menu-title mt-2">Apps</li>
 
                 <li>

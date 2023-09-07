@@ -11,13 +11,18 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 use App\Jobs\postDataJob;
+use App\Jobs\sendDataToEndpointJob;
 use App\Models\balanceBot;
+use App\Models\cash;
 use App\Models\cheques;
+use App\Models\loan;
+use App\Models\overdraft;
 use App\Models\premisesFurnitureEquipment;
 use assetOwned;
 
 class AssetsDataController extends Controller
 {
+    
     protected $url;
     protected $bic;
 
@@ -27,456 +32,220 @@ class AssetsDataController extends Controller
         $this->bic = '021';
     }
 
-    public function postEndPointResponse($endpoint, $data, $informationId)
-    {
-        $headers = array(
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Sender' => $this->bic
-        );
+    public function assetOwned(Request $request)
+    {   
+        
+        $base = new baseController;
+        $endpoint = $this->url . "assetOwned";
+        $reportName = 'assetOwned';
+        return $base->sendDataToEndpoint(assetOwned::class, $endpoint, $reportName);
 
-        if ($informationId) {
-            $headers['informationId'] = $informationId;
-        }
-
-        $response = Http::withHeaders($headers)->post($this->url.$endpoint, $data);
-
-        if ($response->status() === 201) {
-            return $data = $response->json();
-        } else {
-            $statusCode = $response->status();
-            $errorMessage = $response['error']['message'];
-
-            return $error = [$statusCode, $errorMessage];
-        }
-    }
-
-
-    public function assetOwned (Request $request)
-    {
-        $datas = assetOwned::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "assetOwned";
-            $reportName = 'assetOwned';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
 
     public function equityInvestment(Request $request)
-    {
-        $datas = equityInvestment::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "equityInvestment";
-            $reportName = 'equityInvestment';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+    {  
+        
+        $base = new baseController;
+        $endpoint = $this->url . "equityInvestment";
+        $reportName = 'equityInvestmentData';
+        return $base->sendDataToEndpoint(equityInvestment::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
 
-    public function invDebtSecurities (Request $request)
-    {
-        $datas = invDebtSecurities::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "invDebtSecurities";
-            $reportName = 'invDebtSecurities';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+    public function invDebtSecurities(Request $request)
+    {  
+        
+        $base = new baseController;
+        $endpoint = $this->url . "invDebtSecurities";
+        $reportName = 'invDebtSecuritiesData';
+        return $base->sendDataToEndpoint(invDebtSecurities::class, $endpoint, $reportName);
+        
     }
 
 
     public function otherAsset(Request $request)
-    {
-
-        $otherAsset = otherAssetData::where('sentStatus', 'no')->get();
-
+    {  
+        $base = new baseController;
         $endpoint = $this->url . "otherAsset";
         $reportName = 'otherAssetData';
-        foreach ($otherAsset as $key => $sdata) {
-            // echo "<pre>";
-            print_r(json_encode($sdata, JSON_PRETTY_PRINT));
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            // postDataJob::dispatch($data, $informationId, $reportName);
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response(['message' => 'Job dispatched to the background'], 200)
-        ->header('Content-Type', 'application/json');
+        return $base->sendDataToEndpoint(otherAssetData::class, $endpoint, $reportName);
     }
 
 
     public function cashInformation(Request $request)
     {
-        $datas = cashInformation::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "cashInformation";
-            $reportName = 'cashInformation';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "cashInformation";
+        $reportName = 'cashData';
+        return $base->sendDataToEndpoint(cash::class, $endpoint, $reportName);
     }
 
 
     public function balanceBot(Request $request)
     {
-        $datas = balanceBot::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "balanceBot";
-            $reportName = 'balanceBOT';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $endpoint = $this->url . "balanceBot";
+        $reportName = 'balanceBOT';
+
+        dispatch(new sendDataToEndpointJob(balanceBot::class, $endpoint, $reportName));
+
+        return "<script>
+                    window.close();
+                </script>";
+        
     }
 
 
     public function balanceOtherBanks(Request $request)
-    {
-        $datas = balanceOtherBanks::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "balanceOtherBanks";
-            $reportName = 'balanceOtherBank';
-            $sdata['bankCode'] = $sdata['bankName'];
-            unset($sdata['bankName']);
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+    {   
+        
+        $base = new baseController;
+        $endpoint = $this->url . "balanceOtherBanks";
+        $reportName = 'balanceOtherBank';
+        return $base->sendDataToEndpoint(balanceOtherBanks::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
-        // return $response;
     }
 
 
     public function balanceMno(Request $request)
     {
-        $datas = balanceMno::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "balanceMno";
-            $reportName = 'balanceMno';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "balanceMno";
+        $reportName = 'balanceMno';
+        return $base->sendDataToEndpoint(balanceMno::class, $endpoint, $reportName);
     }
 
 
     public function interbankLoansReceivable(Request $request)
     {
-        $datas = interbankLoansReceivable::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "interbankLoansReceivable";
-            $reportName = 'interbankLoansReceivable';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "interbankLoansReceivable";
+        $reportName = 'interbankLoansReceivable';
+        return $base->sendDataToEndpoint(interbankLoansReceivable::class, $endpoint, $reportName);   
     }
 
 
     public function loan(Request $request)
     {
-        $datas = loan::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "loan";
-            $reportName = 'loan';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        
+        $base = new baseController;
+        $endpoint = $this->url . "loan";
+        $reportName = 'loanInformation';
+        return $base->sendDataToEndpoint(loan::class, $endpoint, $reportName);
+        
     }
 
 
     public function interBranchFloatItem(Request $request)
     {
-        $datas = interBranchFloatItem::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "interBranchFloatItem";
-            $reportName = 'interBranchFloatItem';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        $base = new baseController;
+        $endpoint = $this->url . "interBranchFloatItem";
+        $reportName = 'interBranchFloatItem';
+        return $base->sendDataToEndpoint(interBranchFloatItem::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
 
     public function overdraft(Request $request)
     {
-        $datas = overdraft::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "overdraft";
-            $reportName = 'overdraft';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "overdraft";
+        $reportName = 'overdraftDetails';
+        // dd("e");
+        return $base->sendDataToEndpoint(overdraft::class, $endpoint, $reportName);
+        
     }
 
 
     public function claimTreasury(Request $request)
     {
-        $datas = claimTreasury::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "claimTreasury";
-            $reportName = 'claimTreasury';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "claimTreasury";
+        $reportName = 'claimTreasury';
+        return $base->sendDataToEndpoint(claimTreasury::class, $endpoint, $reportName);
+        
     }
 
 
     public function institutionPremises(Request $request)
     {
-        $datas = institutionPremises::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "institutionPremises";
-            $reportName = 'institutionPremises';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "institutionPremises";
+        $reportName = 'institutionPremises';
+        return $base->sendDataToEndpoint(institutionPremises::class, $endpoint, $reportName);
     }
 
 
     public function customerLiabilities(Request $request)
     {
-        $datas = customerLiabilities::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "customerLiabilities";
-            $reportName = 'customerLiabilities';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "institutionPremises";
+        $reportName = 'institutionPremises';
+        return $base->sendDataToEndpoint(institutionPremises::class, $endpoint, $reportName);
+        
     }
 
 
     public function cheques(Request $request)
     {
-        $datas = cheques::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "cheques";
-            $reportName = 'cheques';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "cheques";
+        $reportName = 'chequesClearing';
+        return $base->sendDataToEndpoint(cheques::class, $endpoint, $reportName);
+        
     }
 
 
     public function commercialOtherBillsPurchased(Request $request)
     {
-        $datas = commercialOtherBillsPurchased::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "commercialOtherBillsPurchased";
-            $reportName = 'commercialOtherBillsPurchased';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "commercialOtherBillsPurchased";
+        $reportName = 'commercialOtherBillsPurchased';
+        return $base->sendDataToEndpoint(commercialOtherBillsPurchased::class, $endpoint, $reportName);
+        
     }
 
 
     public function underwritingAccounts(Request $request)
     {
-        $datas = underwritingAccounts::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "underwritingAccounts";
-            $reportName = 'underwritingAccounts';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "underwritingAccounts";
+        $reportName = 'underwritingAccounts';
+        return $base->sendDataToEndpoint(underwritingAccounts::class, $endpoint, $reportName);
+        
     }
 
 
     public function digitalCredit(Request $request)
     {
-        $datas = digitalCredit::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "digitalCredit";
-            $reportName = 'digitalCredit';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "digitalCredit";
+        $reportName = 'digitalCredit';
+        return $base->sendDataToEndpoint(digitalCredit::class, $endpoint, $reportName);
+        
     }
 
 
     public function microfinanceSegmentLoans(Request $request)
     {
-        $datas = microfinanceSegmentLoans::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "microfinanceSegmentLoans";
-            $reportName = 'microfinanceSegmentLoans';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "microfinanceSegmentLoans";
+        $reportName = 'microfinanceSegmentLoans';
+        return $base->sendDataToEndpoint(microfinanceSegmentLoans::class, $endpoint, $reportName);
     }
 
 
     public function premisesFurnitureEquipment(Request $request)
     {
-        $datas = premisesFurnitureEquipment::where('sentStatus', 'no')->get();
-
-        $response = null;
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "premisesFurnitureEquipment";
-            $reportName = 'premisesFurnitureEquipment';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "premisesFurnitureEquipment";
+        $reportName = 'premisesFurnitureEquipment';
+        return $base->sendDataToEndpoint(premisesFurnitureEquipment::class, $endpoint, $reportName);
+        
     }
+
+
 
 }
