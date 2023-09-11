@@ -174,41 +174,55 @@
                                 <a href="{{ route('shareCapital') }}">Share Capital <span
                                         class="badge text-white bg-success float-end">Done</span></a>
                             </li>
-                            {{-- <li>
-                                <a href="{{ route('otherCapitalAccount') }}">Other Capital Account</a>
-                            </li> --}}
                         </ul>
                     </div>
                 </li>
 
                 <li>
-                    <a href="#EquityData" data-toggle="collapse">
+                    <a href="#Liabilities" data-toggle="collapse">
                         <i data-feather="chevrons-right"></i>
                         {{-- <span class="badge badge-success badge-pill float-right">4</span> --}}
                         <span> Liabilities Data </span>
                     </a>
-                    <div class="collapse" id="EquityData">
+                    <div class="collapse" id="Liabilities">
                         <ul class="nav-second-level">
-                            @foreach ([
-                                        'digitalSaving' => 'Digital Saving',
-                                        'LiabilitiesiInterBranchFloatItem' => 'Inter Branch Float Item',
-                                        'bankersCheques' => 'Bankers Cheques',
-                                        'transfersPayable' => 'Transfers Payable',
-                                        'accruedTaxes' => 'Accrued Taxes',
-                                        'subordinatedDebt' => 'Subordinated Debt',
-                                        'unearnedIncome' => 'Unearned Income',
-                                        'outstandingAcceptances' => 'Outstanding Acceptances',
-                                        'depositInformation' => 'Deposit Information',
-                                        'borrowingsInformation' => 'Borrowings Information',
-                                        'interbankLoanPayable' => 'Interbank Loan Payable',
-                                        'otherLiabilities' => 'Other Liabilities',
-                                    ] as $routeName => $routeLabel)
-                                <li>
-                                    <a href="{{ route($routeName) }}">{{ $routeLabel }}
-                                        <span class="badge text-white bg-success float-end">Done</span>
-                                    </a>
-                                </li>
-                            @endforeach
+                            
+                            <li>
+                                <a href="{{ route('digitalSaving') }}">Digital Saving <span class="badge text-white bg-danger float-end">no</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('LiabilitiesiInterBranchFloatItem') }}">Inter Branch FloatItem <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('bankersCheques') }}">Bankers Cheques <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('transfersPayable') }}">Transfers Payable <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('accruedTaxes') }}">Accrued Taxes <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('subordinatedDebt') }}">Subordinated Debt <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('unearnedIncome') }}">Unearned Income <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('outstandingAcceptances') }}">Outstanding Acceptances <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('depositInformation') }}">Deposit Information <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('borrowingsInformation') }}">Borrowings Information <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('interbankLoanPayable') }}">Inter Bank Loan Payable <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('otherLiabilities') }}">Other Liabilities <span class="badge text-white bg-warning float-end">Done</span></a>
+                            </li>
 
                         </ul>
                     </div>

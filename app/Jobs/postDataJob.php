@@ -44,7 +44,7 @@ class postDataJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // 
         $response = BaseController::postEndPointResponse($this->endpoint, $this->data, $this->informationId, $this->reportName);
     }
     /**

@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class EquityDataController extends Controller
 {
-    protected $endpoint = 'https://suptech-wso2-dev.bot.go.tz:8245/bot-suptech-others/v1/equity/';
+    protected $endpoint = 'https://suptech-wso2-dev.bot.go.tz:8245/bank-equity/v1/equity/';
 
     protected $url;
     protected $bic;
 
     public function __construct()
     {
-        $this->url = 'https://suptech-wso2-dev.bot.go.tz:8245/bank-assets/v1/equity/';
+        $this->url = 'https://suptech-wso2-dev.bot.go.tz:8245/bank-equity/v1/equity/';
         $this->bic = '021';
     }
 
@@ -39,8 +39,8 @@ class EquityDataController extends Controller
     {   
         
         $base = new baseController;
-        $endpoint = $this->url . "ShareCapital";
-        $reportName = 'ShareCapitalData';
+        $endpoint = $this->url . "shareCapital";
+        $reportName = 'shareCapitalData';
         return $base->sendDataToEndpoint(ShareCapital::class, $endpoint, $reportName);
 
     }
@@ -49,8 +49,8 @@ class EquityDataController extends Controller
     {   
     
         $base = new baseController;
-        $endpoint = $this->url . "ShareCapital";
-        $reportName = 'ShareCapitalData';
+        $endpoint = $this->url . "shareCapital";
+        $reportName = 'shareCapitalData';
         return $base->sendDataToEndpoint(shareCapital::class, $endpoint, $reportName);
 
     }

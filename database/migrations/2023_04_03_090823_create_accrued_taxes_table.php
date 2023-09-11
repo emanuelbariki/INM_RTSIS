@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('accrued_taxes', function (Blueprint $table) {
             $table->id();
-
             $table->string("reportingDate");
             $table->string("claimantName");
             $table->string("payableCategory")->comment("Income tax payable"); // removing the comment

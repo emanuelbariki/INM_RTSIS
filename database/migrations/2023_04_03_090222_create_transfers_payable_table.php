@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('transfers_payable', function (Blueprint $table) {
             $table->id();
-
+            
             $table->string("reportingDate") ;
             $table->string("customerIdentificationNumber");
             $table->string("beneficiaryName");

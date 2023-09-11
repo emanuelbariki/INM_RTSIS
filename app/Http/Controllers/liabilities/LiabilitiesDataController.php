@@ -5,17 +5,29 @@ namespace App\Http\Controllers\liabilities;
 use App\Http\Controllers\baseController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\digitalSaving;
+use App\Models\accruedTaxes;
+use App\Models\bankersCheques;
+use App\Models\depositInformation;
+use App\Models\interbankLoanPayable;
+use App\Models\interBranchFloatItem;
+use App\Models\otherLiabilities;
+use App\Models\outstandingAcceptances;
+use App\Models\subordinatedDebt;
+use App\Models\transfersPayable;
+use App\Models\unearnedIncome;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class LiabilitiesDataController extends Controller
 {
-    protected $endpoint = 'https://suptech-wso2-dev.bot.go.tz:8245/bot-suptech-others/v1/equity/';
+    protected $endpoint = 'https://suptech-wso2-dev.bot.go.tz:8245/bot-suptech-others/v1/liabilities/';
     protected $url;
     protected $bic;
 
     public function __construct()
     {
-        $this->url = 'https://suptech-wso2-dev.bot.go.tz:8245/bank-assets/v1/equity/';
+        $this->url = 'https://suptech-wso2-dev.bot.go.tz:8245/bank-liability/v1/liabilities/';
         $this->bic = '021';
     }
 
@@ -78,11 +90,7 @@ class LiabilitiesDataController extends Controller
 
     }
 
-    public function getDigitalSaving(Request $request)
-    {
-        # code...
-        return  getEndPointResponse('/digitalSaving', $request->informationId);
-    }
+
 
 
     public function LiabilitiesiInterBranchFloatItem(Request $request)
@@ -91,14 +99,8 @@ class LiabilitiesDataController extends Controller
         $endpoint = $this->url . "interBranchFloatItem";
         $reportName = 'interBranchFloatItem';
         return $base->sendDataToEndpoint(interBranchFloatItem::class, $endpoint, $reportName);
-
     }
 
-    public function getInterBranchFloatItem(Request $request)
-    {
-        # code...
-        return  getEndPointResponse('/interBranchFloatItem', $request->informationId);
-    }
 
     public function bankersCheques(Request $request)
     {
@@ -133,21 +135,12 @@ class LiabilitiesDataController extends Controller
 
     public function accruedTaxes(Request $request)
     {
-        $datas = accruedTaxes::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "accruedTaxes";
-            $reportName = 'accruedTaxes';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
+        // dd("Emanuel");
+        $base = new baseController;
+        $endpoint = $this->url . "accruedTax";
+        $reportName = 'accruedTax';
+        return $base->sendDataToEndpoint(accruedTaxes::class, $endpoint, $reportName);
 
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
     }
 
 
@@ -186,21 +179,11 @@ class LiabilitiesDataController extends Controller
 
     public function unearnedIncome(Request $request)
     {
-        $datas = unearnedIncome::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "unearnedIncome";
-            $reportName = 'unearnedIncome';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "unearnedIncome";
+        $reportName = 'unearnedIncome';
+        return $base->sendDataToEndpoint(unearnedIncome::class, $endpoint, $reportName);
+        
     }
 
     public function getUnearnedIncome(Request $request)
@@ -312,21 +295,11 @@ class LiabilitiesDataController extends Controller
 
     public function otherLiabilities(Request $request)
     {
-        $datas = otherLiabilities::where('sentStatus', 'no')->get();
-        foreach ($datas as $key => $sdata) {
-            
-            $endpoint = $this->url . "otherLiabilities";
-            $reportName = 'otherLiabilities';
-            $informationId = baseController::quickRandom(10);
-            $data = [
-                $sdata
-            ];
-            Log::info(json_encode($data,JSON_PRETTY_PRINT));
-            $response[] = baseController::postEndPointResponse($endpoint, $data, $informationId,$reportName);
-        }
-
-        return response($response, 200)
-            ->header('Content-Type', 'Application/json');
+        $base = new baseController;
+        $endpoint = $this->url . "other";
+        $reportName = 'otherLiabilities';
+        return $base->sendDataToEndpoint(otherLiabilities::class, $endpoint, $reportName);
+        
     }
 
     public function getOtherLiabilities(Request $request)
